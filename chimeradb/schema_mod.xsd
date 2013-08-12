@@ -1,0 +1,1066 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Qnowledge XSD file for all XML files, Copyright (c) 2009 MARIN, MSG-Qnowledge
+
+General remarks:
+ - A lot of complex strings are written between CDATA tags to overcome problems with all kinds of special characters. Furthermore it will keep ASCII layout 
+   intact. Please look in an example for more details;
+ - There are serveral complex types created, being definitions of structures, that can show up in the the xml at different places with sometimes different tags
+   always having the same inside structure (such as <constraint> and <relation>);
+ - <telitab> is another example. It is a recurrent structure throughout the XML/XSD. This means that TeLiTab structures can repeat itself: 
+   A TeLiTab will contain parameters and parameter may contain TeLiTab which may contain parameters...;
+ - the <content> tag of the binary <bin> tag contains the actual Base64 encoded binary data. 
+   Because currently the Microsoft parser and XML DOM (Document Object Model) component is used, the XML document will contain an additional attribute
+   dt:dt="bin.base64" to indicate the encoding of the binary data into ASCII for inclusion along with the appropriate reference to the namespace
+   (xmlns:dt="urn:schemas-microsoft-com:datatypes");
+
+Available root nodes:
+<qcontrol>							the xml to communicatie with QSERV and HeadlessQ;
+<qkb>								the xml definition of the Quaestor Knowledge Base;
+<qpf>								the xml definition of the Quaestor Project Data File;
+<telitab>							the xml definition of the Quaestor General Data File;
+
+Discription of these root nodes:
+[QControl] QControl contains all control information to communicate with Quaestor as a server. Will be documented when project is finalised.
+<qcontrol>							the root node for a client-server session;
+ <session>							the client-server session identification;
+	<message>                       a message
+	<code>                          coding for Quaestor client
+	<id>							the session ID
+	<status>                        the sessin status, 1 is pending, 2 if finished
+ <dialog>
+	<qi_cmdstartenabled>		
+	<qi_cmdbreakenabled> 
+	<qi_cmdstopenabled>
+	<qi_cmdreadenabled>
+	<qi_cmdinheritenabled>
+	<qi_cmdshowfilterenabled> 
+	<qi_origin>
+	<qi_instruction>
+	<qi_noresult>
+	<qi_instructnr>
+	...
+ <qkb>									the relevant knowledge for the client-server session, see [QKB] for further information.
+	 ...									see [QKB] for further information.
+
+[QKB] QKB stands for Quaestor Knowledge Base. It contains all knowledge components in the Quaestor knowledge-based system.
+<qkb>									the root node for a Quaestor Knowledge Base;
+ <name>								the knowledge base name;
+ <qclasses>							OPTIONAL, all classes in the knowledge base, presented by a tree in the knowledge base to organise parameters and relations;
+	<qclass>							the class name;
+ <parameters>						OPTIONAL, all parameter definitions in the knowledge base, definition of parameter names, types etc; see [TeLiTab] for further
+											information;
+	 ...									see  [TeLiTab]  for further information;
+ <functions>							OPTIONAL, all functions in the knowledge base, only the ones created by the KE, the intrisic functions are only available inside
+											 Quaestor;
+	<function>							start of a function definition;
+		<expression>				the function expression;
+		<adr>							the knowledge base frame address;
+		<dim>							the dimension of the function;
+ <constraints>						OPTIONAL, all constraints in the knowledge base, constraints are connected to relations;
+	<constraint>						start of aconstraint definition, is of the expressionType;
+		<expression>				the constraint expression;
+		<adr>							the knowledge base frame address;
+		<connected>					the relations it is connected to, several <connected> tags can be available inside <constraint>
+		<data>							the optional data available in the dataslot of the constraint;
+		<prop>							constrinat properties. Additional properties for Quaestor;
+		<ref>							the constraint description;
+			<reftext>					the total reference text;
+ <relations>							OPTIONAL, all relations in the knowledge base, relations are connected to constraints;
+	<relation>							start of a relation definition, is of the expressionType;
+		<expression>				the constraint expression;
+		<adr>							the knowledge base frame address;
+		<connected>					the relations it is connected to, several <connected> tags can be available inside <constraint>
+		<data>							the optional data available in the dataslot of the constraint;
+		<prop>							constrinat properties. Additional properties for Quaestor;
+		<ref>							the constraint description;
+			<reftext>					the total reference text;
+ <solutions>							OPTIONAL, all solutions in the knowledge base, the first solution represents the dataset of the knowledge base;
+	<solution>							start of a solution;
+		<solutionid>
+		<codb>
+		<wbdb>
+		<parent>
+		<dbinput>
+		<telitab>						see  [TeLiTab]  for further information;
+			 ...							see  [TeLiTab]  for further information;
+
+[QPF] QPF stands for Quaestor Project File. It contains all data and solutions of a Quaestor project.
+<qpf>									the root node for a Quaestor Project File;
+ <kernelqkb>							name of the related kernel knowledge base;
+ <solutions>							all solutions in the project file, at leased one solutions and the first solution represents the dataset of the project, see  [QKB]  for further information;
+	...										, see  [QKB]  for further information;
+
+[TeLiTab] TeLiTab stands for Text List Table. It is the generic representation of data in Quaestor. It is the most fundamental (xml-)data block.
+<telitab>								the root node for a TeLiTab, can be a value of a parameter;
+ <title>									the name/title of the dataset, unique;
+ <parameters>						all parameter definitions in the dataset, definition of parameter names, types etc;
+	<parameterDef>					available for each parameter;
+		<name>						parameter name;
+		<type>							Quaestor parameter type, being either string (str) or numerical (num);
+		<key>							OPTIONAL, identifies the collumn in the dataset it is related to;
+		<setkey>						OPTIONAL, identifies the TeLiTab in the dataset it is related to;
+		<qclass>						the knowledge base class it is presented in;
+		<adr>							the knowledge base frame address;
+		<data>							the optional data available in the dataslot of the parameter;
+		<dim>							the dimension of the parameter;
+		<wbdim>						OPTIONAL, presentation dimension (for eGroupWare);
+		<inp>							fixed knowledge base value;
+		<ref>							the parameter description;
+			<refline>					OPTIONAL, the first line of the parameter description (for eGroupWare);
+			<refhtml>					OPTIONAL, the HTML version of the total reference text  (for eGroupWare);
+			<reftext>					the total reference text;
+		<interface>					OPTIONAL, definition of interface information for presenting a parameter during a dialogue (for eGroupWare);
+			<minval>					OPIONAL, minimum parameter value;
+			<maxval>					OPIONAL, maximum parameter value;
+			<views>					all possible parameter presentations;
+				<view>					the parameter view (at this moment 5 different view);
+			<type>						interface type;
+			<caption>					OPTIONAL, caption for the interface element;
+			<buttons>					OPTIONAL, buttons for the interface element;
+				<button>				a button;
+					<caption>			the text on the button;
+					<action>			the actual action when selected (pressed or selected, etc.);
+			<options>					OPTIONAL, possible choices for a parameter;
+				<option>				the choice;
+					<text>				the description of the choice;
+					<val>				the value when choosen;
+					<bin>				OPTIONAL, binary data for each option;
+						<id>				indentifier for Quaestor, usually the filename including the path;
+						<filename>	the filename;
+						<filetype>		the type of the file (gif, jpg, png, doc, xls,...);
+						<content>		OPTIONAL, the actual Base64 encoded binary data, see also remark above. Optional because also path and filename 
+											might be used;
+			<bin>						OPTIONAL, binary data for the total interface, same definition as above;
+		<prop>							OPTIONAL, parameter properties. Additional properties for Quaestor;
+		<bin>							OPTIONAL, binary data for the parameter, same definition as above;
+	<text>								the text value (document) of the dataset (the "Te" in TeLiTab);
+	<list>								the list values of the dataset (the "Li" in TeLiTab);
+		<parameter>					OPTIONAL, the parameters in the list;
+			<name>					the parameter name;
+			<val>						the parameter value;
+				<bln>					whether the parameter value is pending or determined;
+				<det>					address of the frame that has determined the value;
+				<req>					address of the frame that has requested the value;
+				<detexp>				OPTIONAL, a summary of the expression determining the value;
+				<reqexp>				OPIONAL, a summary of the expression requesting the value;
+				<status>				the status presented in the interface: input required/can be calculated/scenarie step/...;
+				[ choice ]				one of the four following should be present:
+					<str>				the string value of the parameter;
+					<num>				the numerical value of the parameter;
+					<telitab>			the TeLiTab value of the parameter. PLEASE NOTE, this is the recurrent behaviour as decribed above:
+											in this tag the whole definition above (and below) will repeat itself.
+					<bin>				the binary value of the parameter, same definition as above;
+	<table>								the table values of the dataset (the "Tab" in TeLiTab);
+		<qcase>						OPTIONAL, the cases in the table;
+			<parameter>				the parameters in the case, same definition as above (in <list>);
+-->
+<xs:schema xmlns:dt="urn:schemas-microsoft-com:datatypes" attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="qcontrol">
+    <xs:annotation>
+      <xs:documentation>Quaestor control interface</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="session">
+          <xs:annotation>
+            <xs:documentation>The client-server session identification</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="message">
+                <xs:annotation>
+                  <xs:documentation>Server status information</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" name="code">
+                <xs:annotation>
+                  <xs:documentation>Server error code</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="id">
+                <xs:annotation>
+                  <xs:documentation>Actual session ID</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element minOccurs="0" name="status" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="dialog">
+          <xs:annotation>
+            <xs:documentation>The user interaction</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="qi_cmdstartenabled">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string" />
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="qi_cmdbreakenabled">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string" />
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element minOccurs="0" name="qi_cmdstopenabled" />
+              <xs:element minOccurs="0" name="qi_cmdreadenabled" />
+              <xs:element minOccurs="0" name="qi_cmdinheritenabled" />
+              <xs:element minOccurs="0" name="qi_cmdshowfilterenabled" />
+              <xs:element minOccurs="0" name="qi_success" />
+              <xs:element minOccurs="0" name="qi_knowledgebase" />
+              <xs:element minOccurs="0" name="qi_quaestorparent" />
+              <xs:element minOccurs="0" name="qi_parentid" />
+              <xs:element minOccurs="0" name="qi_answer" />
+              <xs:element minOccurs="0" name="qi_command" />
+              <xs:element minOccurs="0" name="qi_username" />
+              <xs:element minOccurs="0" name="qi_itemid" />
+              <xs:element minOccurs="0" name="qi_timeout" />
+              <xs:element minOccurs="0" name="qi_solution" />
+              <xs:element minOccurs="0" name="qi_title" />
+              <xs:element minOccurs="0" name="qi_startinference" />
+              <xs:element minOccurs="0" name="qi_nodefaults" />
+              <xs:element minOccurs="0" name="qi_range" />
+              <xs:element minOccurs="0" name="qi_acceptall" />
+              <xs:element minOccurs="0" name="qi_origin" />
+              <xs:element minOccurs="0" name="qi_originobject" />
+              <xs:element minOccurs="0" name="qi_objectid" />
+              <xs:element minOccurs="0" name="qi_summary" />
+              <xs:element minOccurs="0" name="qi_noresult" />
+              <xs:element minOccurs="0" name="qi_instruction" />
+              <xs:element minOccurs="0" name="qi_instructnr" />
+              <xs:element minOccurs="0" name="qi_candidate" />
+              <xs:element minOccurs="0" name="qi_constraint" />
+              <xs:element minOccurs="0" name="qi_caption" type="xs:string" />
+              <xs:element minOccurs="0" name="interface">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="type" />
+                    <xs:element minOccurs="0" name="caption" />
+                    <xs:element minOccurs="0" name="buttons">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element maxOccurs="unbounded" name="button">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="caption" />
+                                <xs:element name="action" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" ref="qkb" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="qkb">
+    <xs:annotation>
+      <xs:documentation>Quaestor Knowledge Base</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="name">
+          <xs:annotation>
+            <xs:documentation>Name of the knowledge base</xs:documentation>
+          </xs:annotation>
+        </xs:element>
+        <xs:element minOccurs="0" name="qclasses">
+          <xs:annotation>
+            <xs:documentation>Class definitions in the knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="qclass">
+                <xs:annotation>
+                  <xs:documentation>Classes</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string" />
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:annotation>
+            <xs:documentation>Parameter definitions in the knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="parameterDef" type="parameterDefType">
+                <xs:annotation>
+                  <xs:documentation>Parameters</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="functions">
+          <xs:annotation>
+            <xs:documentation>Function definitions in the knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="function" type="functionType">
+                <xs:annotation>
+                  <xs:documentation>Functions</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="constraints">
+          <xs:annotation>
+            <xs:documentation>Constraint definitions in the knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="constraint" type="constraintType">
+                <xs:annotation>
+                  <xs:documentation>Constraints</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="domains">
+          <xs:annotation>
+            <xs:documentation>Domain definitions in the knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="domain" type="domainType">
+                <xs:annotation>
+                  <xs:documentation>Domains</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element minOccurs="0" name="relations">
+          <xs:annotation>
+            <xs:documentation>Relation definitions in the knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="relation" type="expressionType">
+                <xs:annotation>
+                  <xs:documentation>Relations</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="solutions">
+          <xs:annotation>
+            <xs:documentation>Solutions in the knowledge base: first solution (solutionid=0) is the dataset of the knowledge base file</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="solution" type="solutionType">
+                <xs:annotation>
+                  <xs:documentation>Solutions</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="qpf">
+    <xs:annotation>
+      <xs:documentation>Quaestor Project Data File: qpf</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="kernelqkb">
+          <xs:annotation>
+            <xs:documentation>Name of the kernel knowledge base</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string" />
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="solutions">
+          <xs:annotation>
+            <xs:documentation>Solutions in the project: first solution (solutionid=0) is the dataset of the project file</xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="solution" type="solutionType">
+                <xs:annotation>
+                  <xs:documentation>Solution</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="telitab" type="telitabType">
+    <xs:annotation>
+      <xs:documentation>Quaestor General Data File: TeLiTab</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="parameterDefType">
+    <xs:annotation>
+      <xs:documentation>Parameter definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:annotation>
+          <xs:documentation>Parameter name</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string" />
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="type">
+        <xs:annotation>
+          <xs:documentation>Quaestor parameter type</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="key">
+        <xs:annotation>
+          <xs:documentation>Key ID for Object parameters to identify collumn in dataset</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="setkey">
+        <xs:annotation>
+          <xs:documentation>Key ID Object parameters to identify TeLiTab in dataset</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="qclass">
+        <xs:annotation>
+          <xs:documentation>QKB class</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="adr">
+        <xs:annotation>
+          <xs:documentation>QKB frame address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="data">
+        <xs:annotation>
+          <xs:documentation>Content in dataslot</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="dim">
+        <xs:annotation>
+          <xs:documentation>Dimension</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="wbdim">
+        <xs:annotation>
+          <xs:documentation>Presentation dimension</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="inp">
+        <xs:annotation>
+          <xs:documentation>Fixed KB value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ref">
+        <xs:annotation>
+          <xs:documentation>Parameter description</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="refline" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>First line of description</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="refhtml">
+              <xs:annotation>
+                <xs:documentation>HTML translation of total description</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="reftext">
+              <xs:annotation>
+                <xs:documentation>Total description</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="interface">
+        <xs:annotation>
+          <xs:documentation>Interfacing definitions</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="minval">
+              <xs:annotation>
+                <xs:documentation>Minimum value</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="maxval">
+              <xs:annotation>
+                <xs:documentation>Maximum value</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="views">
+              <xs:annotation>
+                <xs:documentation>All possible parameter presentations</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element maxOccurs="unbounded" name="view">
+                    <xs:annotation>
+                      <xs:documentation>Parameter presentation</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:simpleContent>
+                        <xs:extension base="xs:string" />
+                      </xs:simpleContent>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="type">
+              <xs:annotation>
+                <xs:documentation>Interface type</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="caption">
+              <xs:annotation>
+                <xs:documentation>Caption for the interface</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="buttons">
+              <xs:annotation>
+                <xs:documentation>All buttons in the interface</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element maxOccurs="unbounded" name="button">
+                    <xs:annotation>
+                      <xs:documentation>Button</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="caption">
+                          <xs:annotation>
+                            <xs:documentation>Text on the button</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="action">
+                          <xs:annotation>
+                            <xs:documentation>Action of the button</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="options">
+              <xs:annotation>
+                <xs:documentation>Choices</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element maxOccurs="unbounded" name="option">
+                    <xs:annotation>
+                      <xs:documentation>Choice</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                      <xs:sequence>
+                        <xs:element name="text">
+                          <xs:annotation>
+                            <xs:documentation>Choice description</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element name="val">
+                          <xs:annotation>
+                            <xs:documentation>Actual value</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                        <xs:element minOccurs="0" name="bin" type="binType">
+                          <xs:annotation>
+                            <xs:documentation>Binary data</xs:documentation>
+                          </xs:annotation>
+                        </xs:element>
+                      </xs:sequence>
+                    </xs:complexType>
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="bin" type="binType">
+              <xs:annotation>
+                <xs:documentation>Binary data</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="prop">
+        <xs:annotation>
+          <xs:documentation>Parameter properties</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="bin" type="binType">
+        <xs:annotation>
+          <xs:documentation>Binary data</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="parameterType">
+    <xs:annotation>
+      <xs:documentation>Parameter value definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:annotation>
+          <xs:documentation>Parameter name</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="val">
+        <xs:annotation>
+          <xs:documentation>Parameter value</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence minOccurs="0">
+            <xs:element name="bln" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Pending or determined</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="det" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Determined by</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element name="req" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Requested by</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:element minOccurs="0" name="detexp">
+              <xs:annotation>
+                <xs:documentation>Determinating expression</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="reqexp">
+              <xs:annotation>
+                <xs:documentation>Requiring expression</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element name="status" type="xs:string">
+              <xs:annotation>
+                <xs:documentation>Interface value status</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+            <xs:choice>
+              <xs:element name="str">
+                <xs:annotation>
+                  <xs:documentation>String value</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string" />
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="num">
+                <xs:annotation>
+                  <xs:documentation>Numerical value</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string" />
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="telitab" />
+              <xs:element name="bin" type="binType">
+                <xs:annotation>
+                  <xs:documentation>Binary data</xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:choice>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="telitabType">
+    <xs:annotation>
+      <xs:documentation>Telitab definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence minOccurs="0">
+      <xs:element name="title">
+        <xs:annotation>
+          <xs:documentation>Title of the dataset</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string" />
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="parameters">
+        <xs:annotation>
+          <xs:documentation>Parameter definitions of the dataset</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence minOccurs="0">
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="parameterDef" type="parameterDefType">
+              <xs:annotation>
+                <xs:documentation>Parameter definitions</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="text">
+        <xs:annotation>
+          <xs:documentation>Text value (document) of the dataset</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:simpleContent>
+            <xs:extension base="xs:string" />
+          </xs:simpleContent>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="list">
+        <xs:annotation>
+          <xs:documentation>List values of the dataset</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence minOccurs="0">
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="parameter" type="parameterType">
+              <xs:annotation>
+                <xs:documentation>Parameter value</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="table">
+        <xs:annotation>
+          <xs:documentation>Table values of the dataset</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence minOccurs="0">
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="qcase" type="qcaseType">
+              <xs:annotation>
+                <xs:documentation>Pasdafarameter value</xs:documentation>
+              </xs:annotation>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="binType">
+    <xs:annotation>
+      <xs:documentation>Binarry data definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="id">
+        <xs:annotation>
+          <xs:documentation>Identifier in Quaestor: filename and path</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="filename">
+        <xs:annotation>
+          <xs:documentation>Filename</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="filetype">
+        <xs:annotation>
+          <xs:documentation>Filetype</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="content">
+        <xs:annotation>
+          <xs:documentation>Base64 binary content</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="functionType">
+    <xs:annotation>
+      <xs:documentation>Function definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="expression">
+        <xs:annotation>
+          <xs:documentation>Function expression</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="adr">
+        <xs:annotation>
+          <xs:documentation>QKB frame address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="expressionType">
+    <xs:annotation>
+      <xs:documentation>Relation definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="expression">
+        <xs:annotation>
+          <xs:documentation>Relation expression</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="adr">
+        <xs:annotation>
+          <xs:documentation>QKB frame address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="connected" type="xs:positiveInteger">
+        <xs:annotation>
+          <xs:documentation>All connected constraint and domain addresses</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="parent">
+        <xs:annotation>
+          <xs:documentation>Addresses of domains containing the relation</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="data">
+        <xs:annotation>
+          <xs:documentation>Content in dataslot</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="prop">
+        <xs:annotation>
+          <xs:documentation>Relation properties</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ref">
+        <xs:annotation>
+          <xs:documentation>Relation description</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="reftext">
+              <xs:annotation>
+                <xs:documentation>Total description</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="bin" type="binType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="domainType">
+    <xs:annotation>
+      <xs:documentation>Domain definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="name">
+        <xs:annotation>
+          <xs:documentation>Domain name</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="adr">
+        <xs:annotation>
+          <xs:documentation>QKB frame address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="parent">
+        <xs:annotation>
+          <xs:documentation>Parent domain adress</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="data">
+        <xs:annotation>
+          <xs:documentation>Content in dataslot</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="prop">
+        <xs:annotation>
+          <xs:documentation>Domain properties</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ref">
+        <xs:annotation>
+          <xs:documentation>Domain description</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="reftext">
+              <xs:annotation>
+                <xs:documentation>Total description</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="constraintType">
+    <xs:annotation>
+      <xs:documentation>Constraint definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="expression">
+        <xs:annotation>
+          <xs:documentation>Constraint expression</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="adr">
+        <xs:annotation>
+          <xs:documentation>QKB frame address</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="data">
+        <xs:annotation>
+          <xs:documentation>Content in dataslot</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="prop">
+        <xs:annotation>
+          <xs:documentation>Constraint properties</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="ref">
+        <xs:annotation>
+          <xs:documentation>Constraint description</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="reftext">
+              <xs:annotation>
+                <xs:documentation>Total description</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base="xs:string" />
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element minOccurs="0" name="bin" type="binType" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="solutionType">
+    <xs:annotation>
+      <xs:documentation>Solution definition</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+      <xs:element name="solutionid">
+        <xs:annotation>
+          <xs:documentation>Solution address, 0 stands for the dataset</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="parent" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation>Parent solution</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="wbdb" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation>Dataset address, usually 0, parent of codb</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="codb" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation>Object address in dataset, input container</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="dbinput" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation>Cases in input container codb</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element ref="telitab" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="qcaseType">    
+    <xs:sequence minOccurs="0">
+      <xs:element name="dummy">
+        <xs:annotation>
+          <xs:documentation>dummy</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="parameter" type="parameterType">
+        <xs:annotation>
+          <xs:documentation>Parameter value</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence> 
+  </xs:complexType>
+</xs:schema>
