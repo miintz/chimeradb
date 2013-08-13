@@ -12,4 +12,4 @@ The current commit (d8127e5cad) will not compile, this is because i cant upload 
 - **Get my point across**
 - Get a hold of some sample data **to help get my point across**
 
-These are just 3 points to make it more user friendly, but truth is the model is only useful to generate a database with a single function call DbContext.Database.Create(), but it's not much use to retrieve data with. This is because i haven't yet found a generic way to create the model with the right relations. I have an inkling of an idea how to do it, but it may be a while before i get there.
+These are just 3 points to make it more user friendly, but truth is the model is only useful to generate a database with a single function call DbContext.Database.Create(), but it's not much use to retrieve data with. This is because i haven't yet found a generic way to create the model with the right relations, using the enigmatic Fluent API. I have an inkling of an idea how to do it, but it may be a while before i get there.

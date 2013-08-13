@@ -91,7 +91,6 @@
     <Compile Include="DBGenerator.designer.cs">
       <DependentUpon>DBGenerator.cs</DependentUpon>
     </Compile>
-    <Compile Include="generated_model_ERAZCFYKRL_qpf.cs" />
     <Compile Include="List.cs" />
     <Compile Include="ObjectCreateMethod.cs" />
     <Compile Include="ObjectDumper.cs" />
@@ -133,24 +132,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="24740.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="koas.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="18120.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="24740_reg.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

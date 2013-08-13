@@ -1757,10 +1757,11 @@ namespace genericdbgenerator
 
         #endregion
 
+
         private void button1_Click(object sender, EventArgs e)
         {
             //dit word even mijn test functie
-            
+        /*    
             generated_ENKSAVGONW_qpfContext org = new generated_ENKSAVGONW_qpfContext();
 
             org.Database.CreateIfNotExists();
@@ -1814,8 +1815,10 @@ namespace genericdbgenerator
             org.qpfTFDB.Add(QPF);
             
             org.SaveChanges();             
+*/
         }
-
+		
+		/*
         private void button2_Click(object sender, EventArgs e)
         {
             generated_ENKSAVGONW_qpfContext org = new generated_ENKSAVGONW_qpfContext();
@@ -1826,7 +1829,7 @@ namespace genericdbgenerator
             //
 
         }
-
+*/
         #region NOTITIYA
         /*
          * virtual is blijkbaar een lazy loading verhaal, heeft verder geen invloed op relations
