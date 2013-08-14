@@ -6,7 +6,7 @@ Turn *any* class structure into a database and corresponding DbContext to access
 ###General jabber###
 <br/>
 
-** It is still in pre-alpha state, but i have confirmed it works with at least one kind of recursive structure with complex types and multiple variations of that structure with more levels, different types of content etc. **
+**It is still in pre-alpha state, but i have confirmed it works with at least one kind of recursive structure with complex types and multiple variations of that structure with more levels, different types of content etc.**
 
 
 The current commit (d8127e5cad) will probably compile but it wont work very well, this is because i cant upload the data have used to test it, and it still loads in the generated model in a very undesirable way. In its current state its nothing more than a fancy prove of concept. Short term plans:
