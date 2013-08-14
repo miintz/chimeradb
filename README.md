@@ -4,7 +4,6 @@
 Turn *any* class structure into a database and corresponding DbContext to access said database.
 
 ###General jabber###
-<br/>
 
 **It is still in pre-alpha state, but i have confirmed it works with at least one kind of recursive structure with complex types and multiple variations of that structure with more levels, different types of content etc.**
 
