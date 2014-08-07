@@ -1,0 +1,5 @@
+C:\Users\Maarten\Documents\Visual Studio 2013\Projects\ChimeraDB\chimeradb\HyperPropertyDescriptor\bin\Release\HyperPropertyDescriptor.dll
+C:\Users\Maarten\Documents\Visual Studio 2013\Projects\ChimeraDB\chimeradb\HyperPropertyDescriptor\bin\Release\HyperPropertyDescriptor.pdb
+C:\Users\Maarten\Documents\Visual Studio 2013\Projects\ChimeraDB\chimeradb\HyperPropertyDescriptor\obj\Release\HyperPropertyDescriptor.csprojResolveAssemblyReference.cache
+C:\Users\Maarten\Documents\Visual Studio 2013\Projects\ChimeraDB\chimeradb\HyperPropertyDescriptor\obj\Release\HyperPropertyDescriptor.dll
+C:\Users\Maarten\Documents\Visual Studio 2013\Projects\ChimeraDB\chimeradb\HyperPropertyDescriptor\obj\Release\HyperPropertyDescriptor.pdb
