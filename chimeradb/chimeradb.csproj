@@ -94,9 +94,6 @@
     <Compile Include="DBGenerator.designer.cs">
       <DependentUpon>DBGenerator.cs</DependentUpon>
     </Compile>
-    <Compile Include="List.cs" />
-    <Compile Include="ObjectCreateMethod.cs" />
-    <Compile Include="ObjectDumper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="schema.designer.cs" />
