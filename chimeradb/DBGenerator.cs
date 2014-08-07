@@ -137,101 +137,7 @@ namespace genericdbgenerator
             btnStart.Enabled = true;
 
             this.Refresh();
-        }
-
-        #region 2de query functie
-        private object NewGetDataFromGeneratedDatabase(object DatabaseContext)
-        {
-            //eens kijken of lazy en eager is uitmaakt hier
-
-            ((DbContext)DatabaseContext).Configuration.LazyLoadingEnabled = false;
-
-            //dus nu heb ik eager loading. nu eens alles laden            
-            String type = "DbSet`1";
-            PropertyInfo[] DbSets = ((object)DatabaseContext).GetType().GetProperties().Where(a => a.PropertyType.Name == type).ToArray();
-
-            IList AllTabels = new List<object>();
-            foreach (PropertyInfo pinf in DbSets)
-            {
-                IQueryable val = (IQueryable)pinf.GetValue(DatabaseContext, null);
-                val.Load();
-                AllTabels.Add(val);
-            }
-
-            return DatabaseContext;
-        }
-        #endregion
-
-        #region Eerste query functie, nog niet erg snel
-        //dit werkt nog niet        
-        private object GetDataFromGeneratedDatabase(object DatabaseContext)
-        {
-            //versie zonder dbsets, eerst die maar eens ophalen en dan de regular flavor van de functie starten            
-
-            String type = "DbSet`1";
-            PropertyInfo[] DbSets = ((object)DatabaseContext).GetType().GetProperties().Where(a => a.PropertyType.Name == type).ToArray();
-
-            IList AllTabels = new List<object>();
-            foreach (PropertyInfo pinf in DbSets)
-            {
-                AllTabels.Add(pinf.GetValue(DatabaseContext, null));
-            }
-
-            //weten we waar de database op gegenereerd is? Nee. we weten niet wat het hoogste niveau is... dus daar moet eerst op gequeryd worden. ElementId = 1 dus
-            //GetDataFromGeneratedDatabase(DatabaseContext, DbSets);
-
-            //dit word even mijn test functie, om te kijken of het mogelijk is om de hele godganse structuur terug te halen uit de db
-
-            object TopRow = null;
-            #region eerst moet ik de row vinden met elementid = 1 (in dit geval dus de QPF) hoe vind ik die?
-
-            for (int y = 0; y < AllTabels.Count; y++)
-            {
-                IQueryable dbset = AllTabels[y] as IQueryable;
-
-                foreach (var row in dbset)
-                {
-                    Type rowtype = row.GetType();
-                    PropertyInfo[] rowtypeproperties = rowtype.GetProperties();
-                    Boolean found = false;
-
-                    for (int u = 0; u < rowtypeproperties.Length; u++)
-                    {
-                        PropertyInfo p = rowtypeproperties[u];
-
-                        if (p.Name == "ElementId")
-                        {
-                            int i = (int)p.GetValue(row, null);
-
-                            if (i == 1)
-                            {
-                                found = true;
-                                TopRow = row;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (found)
-                        break;
-                }
-            }
-            #endregion
-
-            //nu kan ik TopRow (Qpf dus) gaan uitpluizen. Daarvoor heb ik het type nodig van de waarde. 
-            String na = TopRow.GetType().Name.Replace("TFDB", "");
-
-            //var TopRowActualType = Activator.CreateInstance(null, "genericdbgenerator." + na).Unwrap();
-
-            Type t = Type.GetType("genericdbgenerator." + na);
-            ConstructorInfo info = t.GetConstructor(Type.EmptyTypes);
-            ObjectCreateMethod inv = new ObjectCreateMethod(info);
-            var TopRowActualType = inv.CreateInstance();
-
-            object retu = UnwrapDatabase(TopRow, TopRowActualType, AllTabels);
-
-            return retu;
-        }
+        }     
 
         private object UnwrapDatabase(object TopRow, object ResultObject, IList AllTables)
         {
@@ -593,8 +499,6 @@ namespace genericdbgenerator
 
             return null;
         }
-
-        #endregion
 
         #region Opslaan van gegevens
         public void EvaluateStructure(object Structure, object[] returners, Int32 ElementId, Boolean IncludeGeneratedContextInProject = false)
@@ -1314,22 +1218,7 @@ namespace genericdbgenerator
             cfield.Name += " {get;set;} //";
 
             targetClass.Members.Add(cfield);
-
-            //voeg ElementId toe, gebruiken we later om de verwijzingen te regelen            
-            var elementid = new CodeMemberField
-            {
-
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Name = "ElementId",
-                Type = new CodeTypeReference(typeof(int)),
-            };
-            elementid.Name += " {get;set;} //";
-
-            //CodeAttributeDeclaration cad = new CodeAttributeDeclaration("Key");
-            //elementid.CustomAttributes.Add(cad);
-
-            targetClass.Members.Add(elementid);
-
+           
             //ok, de ClassType word 1 klasse, de speciale types en lists worden een verwijzing
             //FieldInfo[] fields = ClassType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             PropertyInfo[] fields = ClassType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
@@ -1606,19 +1495,7 @@ namespace genericdbgenerator
             //Dit compilereert als automatic property maar is in feite een field. Handig. 
             idfield.Name += " {get;set;} //";
             ListTableClass.Members.Add(idfield);
-
-            //voeg ElementId toe, gebruiken we later om de verwijzingen te regelen            
-            var elementid = new CodeMemberField
-            {
-                Attributes = MemberAttributes.Public | MemberAttributes.Final,
-                Name = "ElementId",
-                Type = new CodeTypeReference(typeof(Int32)),
-            };
-
-            //wederom fieldhack doen, dit gebeurt bij alle properties dus. 
-            elementid.Name += " {get;set;} //";
-            ListTableClass.Members.Add(elementid);
-
+            
             //voeg value veld toe, om de lijst value in op te slaan
             var value = new CodeMemberField
             {
