@@ -38,8 +38,8 @@
     <StartupObject>genericdbgenerator.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DynamicLinq">
-      <HintPath>..\..\..\..\..\..\..\..\IW\dll\DynamicLinq.dll</HintPath>
+    <Reference Include="DynamicLINQ">
+      <HintPath>..\packages\DynamicLINQ.1.0\lib\net40\DynamicLINQ.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>C:\Users\Maarten\documents\visual studio 2013\Projects\OpenWeather\packages\EntityFramework.6.1.1\lib\net40\EntityFramework.dll</HintPath>
@@ -63,7 +63,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="HtmlAgilityPack">
-      <HintPath>..\..\..\..\..\..\..\..\IW\dll\HtmlAgilityPack.dll</HintPath>
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="HyperPropertyDescriptor">
       <HintPath>C:\Users\Maarten\Documents\Visual Studio 2013\Projects\ChimeraDB\chimeradb\HyperPropertyDescriptor.dll</HintPath>

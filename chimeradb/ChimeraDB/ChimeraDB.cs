@@ -5,7 +5,7 @@ using System.Text;
 
 namespace genericdbgenerator
 {
-    class ChimeraDB
+    class Chimera
     {
     }
 }
