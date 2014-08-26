@@ -7,5 +7,6 @@ namespace genericdbgenerator
 {
     class Chimera
     {
+        String s = "";
     }
 }
