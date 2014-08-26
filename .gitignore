@@ -146,6 +146,7 @@ csx/
 # Windows Store app package directory
 AppPackages/
 chimeradb/obj/x86/*
+chimeradb/bin/Debug/*
 # Others
 sql/
 *.Cache
