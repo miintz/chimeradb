@@ -88,6 +88,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChimeraDB\ChimeraDB.cs" />
+    <Compile Include="ChimeraDB\Creater.cs" />
+    <Compile Include="ChimeraDB\Retriever.cs" />
+    <Compile Include="ChimeraDB\Saver.cs" />
     <Compile Include="DBGenerator.cs">
       <SubType>Form</SubType>
     </Compile>
