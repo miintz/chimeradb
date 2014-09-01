@@ -1,0 +1,9 @@
+uitzoeken: 
+
+Hoe zit het met licenties? 
+
+toevoegen:
+
+- HtmlAgilityPack (voor de xsd2code ofzo?)
+- EntityFramework (nuget heeft toch autoresolve?)
+- DynamicLinq
